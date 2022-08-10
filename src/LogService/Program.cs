@@ -1,4 +1,4 @@
-using CommonLibrary.MassTransit;
+using CommonLibrary.Extentions.MassTransit;
 using CommonLibrary.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
