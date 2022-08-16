@@ -1,5 +1,6 @@
 using CommonLibrary.AspNetCore;
 using CommonLibrary.Core;
+using CommonLibrary.Logging;
 using LogService.EFCore;
 using LogService.LogHandle;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +12,9 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var logger = new LoggerConfiguration().WriteTo.Console();
 builder.Services.AddCommonLibrary(builder.Configuration, builder.Logging, logger , MyAllowSpecificOrigins);
+
 builder.Services.AddScoped<IRepository<LogHandle>, LogHandleRepository>();
-builder.Services.AddDbContext<ServiceDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
+builder.Services.AddDbContext<ServiceDbContext>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

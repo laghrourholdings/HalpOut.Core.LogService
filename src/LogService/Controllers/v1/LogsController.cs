@@ -1,5 +1,4 @@
-﻿using CommonLibrary.AspNetCore;
-using CommonLibrary.Core;
+﻿using CommonLibrary.Core;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogService.Controllers.v1;
@@ -9,9 +8,9 @@ namespace LogService.Controllers.v1;
 [ApiController]
 public class LogsController : ControllerBase
 {
-    private readonly IRepository<LogHandle.LogHandle> _handleRepository;
+    private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
     
-    public LogsController(IRepository<LogHandle.LogHandle> objectRepository)
+    public LogsController(IRepository<CommonLibrary.Logging.LogHandle> objectRepository)
     {
         _handleRepository = objectRepository;
     }
