@@ -19,6 +19,8 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Implementations" />
+      <Folder Include="LogHandle\Implementations" />
+      <Folder Include="LogHandle\Interfaces" />
       <Folder Include="Signals" />
     </ItemGroup>
 

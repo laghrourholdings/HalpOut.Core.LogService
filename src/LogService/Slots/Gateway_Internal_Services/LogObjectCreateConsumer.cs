@@ -1,55 +1,55 @@
 ﻿using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.ServiceBus;
+using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
-using LogService.LogHandle;
 using MassTransit;
 using ILogger = Serilog.ILogger;
 
 namespace LogService.Slots.Gateway_Internal_Services;
 
-public class CreateObjectConsumer : IConsumer<LogObjectCreate>
+public class LogObjectCreateConsumer : IConsumer<LogCreateObject>
 {
     
-    private readonly IRepository<LogHandle.LogHandle> _handleRepository;
+    private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
     private readonly ILogger _logger;
 
-    public CreateObjectConsumer(IRepository<LogHandle.LogHandle> handleRepository, ILogger logger)
+    public LogObjectCreateConsumer(IRepository<CommonLibrary.Logging.LogHandle> handleRepository, ILogger logger)
     {
         _handleRepository = handleRepository;
         _logger = logger;
     }
-    public static string GetMessage(ref LoggingInterpolatedStringHandler handler) => handler.ToString();
 
     
-    public async Task Consume(ConsumeContext<LogObjectCreate> context)
+    public async Task Consume(ConsumeContext<LogCreateObject> context)
     {
         var logContext = context.Message.Payload;
-        LogHandle.LogHandle logHandle = new LogHandle.LogHandle
+        var messages = new List<LogMessage>();
+        messages.Add(new LogMessage
+        {
+            Id = 0,
+            Message = ServiceSettings.GetMessage($"LogCreateObject: {logContext.Message.Subject}"),
+            CreationDate = DateTimeOffset.Now,
+            Severity = logContext.Severity
+        });
+        CommonLibrary.Logging.LogHandle logHandle = new CommonLibrary.Logging.LogHandle
         {
             Id = Guid.NewGuid(),
-            ObjectId = logContext.Message.Subject,
-            Messages = new SortedSet<LogMessage>(new []
-            {
-                new LogMessage
-                {
-                    Id = 0,
-                    Message = GetMessage($"{@logContext.Message.Subject}"),
-                    CreationDate = DateTimeOffset.Now,
-                    Severity = logContext.Severity
-                }
-            })
+            ObjectId = logContext.Message.Subject.Id,
+            Messages = messages
         };
-        var response = new ServiceBusMessageReponse<Guid>
+        var obj = logContext.Message.Subject;
+        obj.LogHandleId = logHandle.Id;
+        obj.LogHandle = logHandle;
+        var response = new ServiceBusMessageReponse<IIObject>
         {
-            Contract = nameof(LogObjectCreateResponse),
+            Contract = nameof(LogCreateObjectResponse),
             InitialRequest = logContext.Message,
-            Subject = logHandle.Id,
-            Descriptor = GetMessage($"LogHandleID: {@logHandle.Id} assigned to : ${logContext.Message.Subject}")
+            Subject = obj,
+            Descriptor = ServiceSettings.GetMessage($"LogHandleID: {{logHandle.Id}} assigned to : ${{logContext.Message.Subject}}")
         };
         _logger.Information("{ResponeDescriptor}", response.Descriptor);
         await _handleRepository.CreateAsync(logHandle);
-        await context.RespondAsync(new LogObjectCreateResponse(response));
-        //await _repository.CreateAsync(item);
+        await context.RespondAsync(new LogCreateObjectResponse(response));
     }
 }

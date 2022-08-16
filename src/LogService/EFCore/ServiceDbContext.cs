@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CommonLibrary.ModelBuilders;
+using Microsoft.EntityFrameworkCore;
 
 namespace LogService.EFCore;
 
@@ -8,6 +9,9 @@ public class ServiceDbContext : DbContext
     {
             
     }
-
-    public DbSet<LogHandle.LogHandle> LogHandles { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.BuildCommonLibrary();
+    }
+    public DbSet<CommonLibrary.Logging.LogHandle> LogHandles { get; set; }
 }

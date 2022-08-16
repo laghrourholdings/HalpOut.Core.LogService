@@ -1,6 +1,4 @@
 ﻿using System.Linq.Expressions;
-using CommonLibrary.AspNetCore.Logging;
-using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
@@ -8,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LogService.LogHandle;
 
-public class LogHandleRepository : IRepository<LogHandle>
+public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
 {
     private readonly ServiceDbContext _context;
 
@@ -17,25 +15,25 @@ public class LogHandleRepository : IRepository<LogHandle>
         _context = context;
     }
     
-    public async Task<IEnumerable<LogHandle>> GetAllAsync()
+    public async Task<IEnumerable<CommonLibrary.Logging.LogHandle>> GetAllAsync()
     {
         return await _context.LogHandles.ToListAsync();
     }
 
-    public Task<IEnumerable<LogHandle>> GetAllAsync(
-        Expression<Func<LogHandle, bool>> filter)
+    public Task<IEnumerable<CommonLibrary.Logging.LogHandle>> GetAllAsync(
+        Expression<Func<CommonLibrary.Logging.LogHandle, bool>> filter)
     {
         throw new NotImplementedException();
     }
 
-    public Task<LogHandle> GetAsync(
+    public Task<CommonLibrary.Logging.LogHandle> GetAsync(
         Guid Id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<LogHandle> GetAsync(
-        Expression<Func<LogHandle, bool>> filter)
+    public Task<CommonLibrary.Logging.LogHandle> GetAsync(
+        Expression<Func<CommonLibrary.Logging.LogHandle, bool>> filter)
     {
         throw new NotImplementedException();
     }
@@ -46,15 +44,37 @@ public class LogHandleRepository : IRepository<LogHandle>
         return handler.ToString();
     }
 
-    public async Task CreateAsync(LogHandle entity)
+    public async Task CreateAsync(CommonLibrary.Logging.LogHandle entity)
     {
         await _context.LogHandles.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
     
     public Task UpdateAsync(
-        LogHandle entity)
+        CommonLibrary.Logging.LogHandle entity)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task UpdateOrCreateAsync(
+        CommonLibrary.Logging.LogHandle entity)
+    {
+        CommonLibrary.Logging.LogHandle? obj = await _context.LogHandles.SingleOrDefaultAsync(x => x.Id == entity.Id);
+        if (obj is null)
+        {
+            try
+            {
+                await CreateAsync(entity);
+            }catch(Exception ex)
+            {
+                await UpdateOrCreateAsync(entity);
+                return;
+            }
+        }
+        else
+        {
+            _context.LogHandles.Update(obj);
+        }
+        await _context.SaveChangesAsync();    
     }
 }
