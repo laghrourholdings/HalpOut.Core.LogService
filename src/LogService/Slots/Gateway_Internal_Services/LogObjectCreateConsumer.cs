@@ -36,12 +36,20 @@ public class LogObjectCreateConsumer : IConsumer<LogCreateObject>
         {
             Id = Guid.NewGuid(),
             ObjectId = logContext.Message.Subject.Id,
+<<<<<<< HEAD
             Messages = messages,
             AuthorizationDetails = "none",
             LocationDetails = "none"
         };
         var obj = logContext.Message.Subject;
         obj.LogHandleId = logHandle.Id;
+=======
+            Messages = messages
+        };
+        var obj = logContext.Message.Subject;
+        obj.LogHandleId = logHandle.Id;
+        obj.LogHandle = logHandle;
+>>>>>>> main
         var response = new ServiceBusMessageReponse<IIObject>
         {
             Contract = nameof(LogCreateObjectResponse),

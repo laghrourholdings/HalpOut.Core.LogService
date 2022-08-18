@@ -25,7 +25,10 @@
       <Folder Include="Implementations" />
       <Folder Include="LogHandle\Implementations" />
       <Folder Include="LogHandle\Interfaces" />
+<<<<<<< HEAD
       <Folder Include="Migrations" />
+=======
+>>>>>>> main
       <Folder Include="Signals" />
     </ItemGroup>
 
