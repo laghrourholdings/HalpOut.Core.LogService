@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogService.Migrations
 {
     [DbContext(typeof(ServiceDbContext))]
-    [Migration("20220818021037_Initial")]
-    partial class Initial
+    [Migration("20221117204957_Init2")]
+    partial class Init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,49 @@ namespace LogService.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CommonLibrary.Core.IIObject", b =>
+            modelBuilder.Entity("CommonLibrary.Logging.LogHandle", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("AuthorizationDetails")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("DeletedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descriptor")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsSuspended")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LocationDetails")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ObjectId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ObjectType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("SuspendedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LogHandles");
+                });
+
+            modelBuilder.Entity("CommonLibrary.Logging.LogMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,93 +90,28 @@ namespace LogService.Migrations
                     b.Property<Guid>("LogHandleId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Severity")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("SuspendedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("IObjects");
-                });
-
-            modelBuilder.Entity("CommonLibrary.Logging.LogHandle", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AuthorizationDetails")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LocationDetails")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ObjectId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ObjectId");
-
-                    b.ToTable("LogHandles");
-                });
-
-            modelBuilder.Entity("CommonLibrary.Logging.LogMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("LogHandleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ObjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Severity")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("LogHandleId");
 
-                    b.HasIndex("ObjectId");
-
-                    b.ToTable("ILogMessage");
-                });
-
-            modelBuilder.Entity("CommonLibrary.Logging.LogHandle", b =>
-                {
-                    b.HasOne("CommonLibrary.Core.IIObject", "Object")
-                        .WithMany()
-                        .HasForeignKey("ObjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Object");
+                    b.ToTable("LogMessages");
                 });
 
             modelBuilder.Entity("CommonLibrary.Logging.LogMessage", b =>
                 {
-                    b.HasOne("CommonLibrary.Logging.LogHandle", null)
+                    b.HasOne("CommonLibrary.Logging.LogHandle", "LogHandle")
                         .WithMany("Messages")
-                        .HasForeignKey("LogHandleId");
-
-                    b.HasOne("CommonLibrary.Core.IIObject", "Object")
-                        .WithMany()
-                        .HasForeignKey("ObjectId")
+                        .HasForeignKey("LogHandleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Object");
+                    b.Navigation("LogHandle");
                 });
 
             modelBuilder.Entity("CommonLibrary.Logging.LogHandle", b =>

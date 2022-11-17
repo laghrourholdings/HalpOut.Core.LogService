@@ -1,5 +1,6 @@
 ﻿using CommonLibrary.Core;
 using Microsoft.AspNetCore.Mvc;
+using ILogger = Serilog.ILogger;
 
 namespace LogService.Controllers.v1;
 
@@ -10,7 +11,7 @@ public class LogsController : ControllerBase
 {
     private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
     
-    public LogsController(IRepository<CommonLibrary.Logging.LogHandle> objectRepository)
+    public LogsController(IRepository<CommonLibrary.Logging.LogHandle> objectRepository, ILogger logger)
     {
         _handleRepository = objectRepository;
     }

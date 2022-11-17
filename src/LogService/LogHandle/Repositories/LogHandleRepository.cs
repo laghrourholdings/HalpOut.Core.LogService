@@ -3,15 +3,18 @@ using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
 using Microsoft.EntityFrameworkCore;
+using ILogger = Serilog.ILogger;
 
 namespace LogService.LogHandle;
 
 public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
 {
     private readonly ServiceDbContext _context;
+    private readonly ILogger _logger;
 
-    public LogHandleRepository(ServiceDbContext context)
+    public LogHandleRepository(ServiceDbContext context, ILogger logger)
     {
+        _logger = logger;
         _context = context;
     }
     
@@ -38,18 +41,22 @@ public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
         throw new NotImplementedException();
     }
 
+    public async Task CreateAsync(
+        CommonLibrary.Logging.LogHandle entity)
+    {
+        _logger.Information("LogHandle created: {Entity}", entity);
+        await _context.LogHandles.AddAsync(entity);
+        if (entity.Messages != null) 
+            await _context.LogMessages.AddRangeAsync(entity.Messages);
+        await _context.SaveChangesAsync();
+    }
+
     string GetMessage(
         ref LoggingInterpolatedStringHandler handler)
     {
         return handler.ToString();
     }
 
-    public async Task CreateAsync(CommonLibrary.Logging.LogHandle entity)
-    {
-        await _context.LogHandles.AddAsync(entity);
-        await _context.SaveChangesAsync();
-    }
-    
     public Task UpdateAsync(
         CommonLibrary.Logging.LogHandle entity)
     {
@@ -73,7 +80,7 @@ public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
         }
         else
         {
-            _context.LogHandles.Update(obj);
+            _context.LogHandles.Update(entity);
         }
         await _context.SaveChangesAsync();    
     }
