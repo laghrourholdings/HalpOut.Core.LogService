@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.AspNetCore.Contracts;
+using CommonLibrary.AspNetCore.Contracts.Objects;
 using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
@@ -6,7 +7,7 @@ using CommonLibrary.Logging;
 using MassTransit;
 using ILogger = Serilog.ILogger;
 
-namespace LogService.Slots.Gateway_Internal_Services;
+namespace LogService.Slots.LogHandles;
 
 public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
 {

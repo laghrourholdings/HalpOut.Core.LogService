@@ -51,6 +51,11 @@ public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
         await _context.SaveChangesAsync();
     }
 
+    public Task RangeAsync(IEnumerable<CommonLibrary.Logging.LogHandle> entity)
+    {
+        throw new NotImplementedException();
+    }
+
     string GetMessage(
         ref LoggingInterpolatedStringHandler handler)
     {

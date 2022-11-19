@@ -13,6 +13,7 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var logger = new LoggerConfiguration().WriteTo.Console();
 builder.Services.AddCommonLibrary(builder.Configuration, builder.Logging, logger , MyAllowSpecificOrigins);
 builder.Services.AddScoped<IRepository<LogHandle>, LogHandleRepository>();
+builder.Services.AddScoped<IRepository<LogMessage>, LogMessageRepository>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddDbContext<ServiceDbContext>();
 builder.Services.AddSwaggerGen();
