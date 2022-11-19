@@ -23,22 +23,22 @@ public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
         return await _context.LogHandles.ToListAsync();
     }
 
-    public Task<IEnumerable<CommonLibrary.Logging.LogHandle>> GetAllAsync(
+    public async Task<IEnumerable<CommonLibrary.Logging.LogHandle>> GetAllAsync(
         Expression<Func<CommonLibrary.Logging.LogHandle, bool>> filter)
     {
-        throw new NotImplementedException();
+        return await _context.LogHandles.Where(filter).ToListAsync();
     }
 
-    public Task<CommonLibrary.Logging.LogHandle> GetAsync(
+    public async Task<CommonLibrary.Logging.LogHandle?> GetAsync(
         Guid Id)
     {
-        throw new NotImplementedException();
+        return await _context.LogHandles.SingleOrDefaultAsync(x => x.Id == Id);
     }
 
-    public Task<CommonLibrary.Logging.LogHandle> GetAsync(
+    public async Task<CommonLibrary.Logging.LogHandle?> GetAsync(
         Expression<Func<CommonLibrary.Logging.LogHandle, bool>> filter)
     {
-        throw new NotImplementedException();
+        return await _context.LogHandles.SingleOrDefaultAsync(filter);
     }
 
     public async Task CreateAsync(
@@ -51,9 +51,13 @@ public class LogHandleRepository : IRepository<CommonLibrary.Logging.LogHandle>
         await _context.SaveChangesAsync();
     }
 
-    public Task RangeAsync(IEnumerable<CommonLibrary.Logging.LogHandle> entity)
+    public async Task RangeAsync(IEnumerable<CommonLibrary.Logging.LogHandle> logHandles)
     {
-        throw new NotImplementedException();
+        await _context.AddRangeAsync(logHandles);
+        foreach (var logHandle in logHandles)
+        {
+            if (logHandle.Messages != null) await _context.LogMessages.AddRangeAsync(logHandle.Messages);
+        }
     }
 
     string GetMessage(

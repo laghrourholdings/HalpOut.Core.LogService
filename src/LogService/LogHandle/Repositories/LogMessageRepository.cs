@@ -11,27 +11,26 @@ public class LogMessageRepository : IRepository<LogMessage>
 {
     private readonly ServiceDbContext _context;
     private readonly ILogger _logger;
-    private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
+    //private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
 
     public LogMessageRepository(
         ServiceDbContext context,
-        ILogger logger,
-        IRepository<CommonLibrary.Logging.LogHandle> handleRepository)
+        ILogger logger)
     {
         _logger = logger;
         _context = context;
-        _handleRepository = handleRepository;
+        //_handleRepository = handleRepository;
     }
 
 
-    public Task<IEnumerable<LogMessage>> GetAllAsync()
+    public async Task<IEnumerable<LogMessage>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.LogMessages.ToListAsync();
     }
 
-    public Task<IEnumerable<LogMessage>> GetAllAsync(Expression<Func<LogMessage, bool>> filter)
+    public async Task<IEnumerable<LogMessage>> GetAllAsync(Expression<Func<LogMessage, bool>> filter)
     {
-        throw new NotImplementedException();
+        return await _context.LogMessages.Where(filter).ToListAsync();
     }
 
     public async Task<LogMessage?> GetAsync(Guid Id)
@@ -39,9 +38,9 @@ public class LogMessageRepository : IRepository<LogMessage>
         return await _context.LogMessages.SingleOrDefaultAsync(x => x.Id == Id);
     }
 
-    public Task<LogMessage?> GetAsync(Expression<Func<LogMessage, bool>> filter)
+    public async Task<LogMessage?> GetAsync(Expression<Func<LogMessage, bool>> filter)
     {
-        throw new NotImplementedException();
+        return await _context.LogMessages.SingleOrDefaultAsync(filter);
     }
 
     public async Task CreateAsync(LogMessage logMessage)
@@ -52,19 +51,23 @@ public class LogMessageRepository : IRepository<LogMessage>
             logMessage.Id = Guid.NewGuid();
             logMessage.Descriptor = logMessage.Descriptor?.Insert(0,"[Id already exists - duplicate] ");
         }
-        _logger.Information("LogMessage created: {Entity}", logMessage);
         await _context.LogMessages.AddAsync(logMessage);
         await _context.SaveChangesAsync();
+        _logger.Information("LogMessage created: {Entity}", logMessage);
     }
 
-    public Task RangeAsync(IEnumerable<LogMessage> entity)
+    public async Task RangeAsync(IEnumerable<LogMessage> logMessages)
     {
-        throw new NotImplementedException();
+        var logMessagesList = logMessages.ToList();
+        await _context.AddRangeAsync(logMessagesList);
+        await _context.SaveChangesAsync();
+        _logger.Information("LogMessages created: {Entity}", logMessagesList);
     }
 
-    public Task UpdateAsync(LogMessage logMessage)
+    public async Task UpdateAsync(LogMessage logMessage)
     {
-        throw new NotImplementedException();
+        _context.Update(logMessage);
+        await _context.SaveChangesAsync();
     }
 
     public Task UpdateOrCreateAsync(LogMessage logMessage)
