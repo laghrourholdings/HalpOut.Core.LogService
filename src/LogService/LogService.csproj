@@ -23,8 +23,8 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Implementations" />
-      <Folder Include="LogHandle\Implementations" />
-      <Folder Include="LogHandle\Interfaces" />
+      <Folder Include="Logs\Implementations" />
+      <Folder Include="Logs\Interfaces" />
       <Folder Include="Migrations" />
       <Folder Include="Signals" />
     </ItemGroup>

@@ -23,6 +23,6 @@ public class ServiceDbContext : DbContext
     {
         modelBuilder.BuildCommonLibrary();
     }
-    public DbSet<CommonLibrary.Logging.LogHandle> LogHandles { get; set; }
+    public DbSet<LogHandle> LogHandles { get; set; }
     public DbSet<LogMessage> LogMessages { get; set; }
 }

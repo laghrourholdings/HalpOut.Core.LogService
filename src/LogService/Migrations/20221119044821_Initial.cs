@@ -20,7 +20,6 @@ namespace LogService.Migrations
                     DeletedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsSuspended = table.Column<bool>(type: "boolean", nullable: false),
                     SuspendedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    LogHandleId = table.Column<Guid>(type: "uuid", nullable: false),
                     Descriptor = table.Column<string>(type: "text", nullable: true),
                     ObjectType = table.Column<string>(type: "text", nullable: false),
                     LocationDetails = table.Column<string>(type: "text", nullable: true),
@@ -32,7 +31,7 @@ namespace LogService.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ILogMessage",
+                name: "LogMessages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -43,14 +42,13 @@ namespace LogService.Migrations
                     SuspendedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LogHandleId = table.Column<Guid>(type: "uuid", nullable: false),
                     Descriptor = table.Column<string>(type: "text", nullable: true),
-                    Message = table.Column<string>(type: "text", nullable: false),
                     Severity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ILogMessage", x => x.Id);
+                    table.PrimaryKey("PK_LogMessages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ILogMessage_LogHandles_LogHandleId",
+                        name: "FK_LogMessages_LogHandles_LogHandleId",
                         column: x => x.LogHandleId,
                         principalTable: "LogHandles",
                         principalColumn: "Id",
@@ -58,15 +56,15 @@ namespace LogService.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ILogMessage_LogHandleId",
-                table: "ILogMessage",
+                name: "IX_LogMessages_LogHandleId",
+                table: "LogMessages",
                 column: "LogHandleId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ILogMessage");
+                name: "LogMessages");
 
             migrationBuilder.DropTable(
                 name: "LogHandles");

@@ -1,5 +1,6 @@
 ﻿using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.Contracts.Objects;
+using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
@@ -12,13 +13,18 @@ namespace LogService.Slots.LogHandles;
 public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
 {
     
-    private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
+    private readonly IRepository<LogHandle> _handleRepository;
     private readonly ILogger _logger;
+    private readonly IConfiguration _configuration;
 
-    public LogCreateObjectConsumer(IRepository<CommonLibrary.Logging.LogHandle> handleRepository, ILogger logger)
+    public LogCreateObjectConsumer(
+        IRepository<LogHandle> handleRepository,
+        ILogger logger,
+        IConfiguration configuration)
     {
         _handleRepository = handleRepository;
         _logger = logger;
+        _configuration = configuration;
     }
 
     
@@ -30,7 +36,7 @@ public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
             _logger.Error("No payload or no subjects attached to payload");
             return;
         }
-        CommonLibrary.Logging.LogHandle logHandle = new CommonLibrary.Logging.LogHandle
+        LogHandle logHandle = new LogHandle
         {
             Id = Guid.NewGuid(),
             ObjectId = payload.Subject.Id,
@@ -39,26 +45,13 @@ public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
             DeletedDate = default,
             IsSuspended = false,
             SuspendedDate = default,
-            Descriptor = ServiceSettings.GetMessage($"InDB Messages"),
+            Descriptor = $"InDB Messages",
             ObjectType = nameof(payload.Subject),
-            Messages = new List<LogMessage>(),
             AuthorizationDetails = "none",
             LocationDetails = "none"
         };
-        var msg = new LogMessage
-        {
-            Id = default,
-            CreationDate = DateTimeOffset.Now,
-            IsDeleted = false,
-            DeletedDate = default,
-            IsSuspended = false,
-            SuspendedDate = default,
-            LogHandleId = default,
-            Descriptor = ServiceSettings.GetMessage($"Received request for object creation: {payload.Subject.Id}"),
-            Severity = LogLevel.Information
-        };
-        logHandle.Messages.Add(msg);
-        
+        logHandle.LogMessage(_configuration, LogLevel.None,
+            $"Received request for object creation: {payload.Subject.Id}");
         var obj = payload.Subject;
         obj.LogHandleId = logHandle.Id;
         var response = new ServiceBusMessageReponse<IIObject>
@@ -66,7 +59,7 @@ public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
             Contract = nameof(UpdateObjectLogHandle),
             InitialRequest = payload,
             Subject = obj,
-            Descriptor = ServiceSettings.GetMessage($"LogHandleID: {logHandle.Id} assigned to : {payload.Subject}")
+            Descriptor = $"LogHandleID: {logHandle.Id} assigned to : {payload.Subject}"
         };
         _logger.Information("{ResponeDescriptor}", response.Descriptor);
         await _handleRepository.CreateAsync(logHandle);

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LogService.Migrations
 {
     [DbContext(typeof(ServiceDbContext))]
-    [Migration("20221117204957_Init2")]
-    partial class Init2
+    [Migration("20221119044821_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
