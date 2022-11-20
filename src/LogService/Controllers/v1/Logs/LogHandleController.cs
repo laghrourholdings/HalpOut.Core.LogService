@@ -1,26 +1,35 @@
-﻿using CommonLibrary.Logging;
+﻿using CommonLibrary.Core;
+using CommonLibrary.Logging;
 using Microsoft.AspNetCore.Mvc;
+using ILogger = Serilog.ILogger;
 
 namespace LogService.Controllers.v1.Logs;
 
-[Route("api/v{version:apiVersion}/[controller]/handles")]
+[Route("api/v{version:apiVersion}/Logs/handles")]
 [ApiVersion("1.0")]
-public partial class LogsController : ControllerBase
+public class LogHandlesController : ControllerBase
 {
+    private readonly IRepository<LogHandle> _handleRepository;
+    private readonly IRepository<LogMessage> _messageRepository;
+    private readonly ILogger _logger;
 
+    public LogHandlesController(
+        IRepository<LogHandle> handleRepository,
+        IRepository<LogMessage> messageRepository,
+        ILogger logger)
+    {
+        _handleRepository = handleRepository;
+        _messageRepository = messageRepository;
+        _logger = logger;
+    }
     [HttpGet]
     public async Task<IActionResult> GetAllHandles()
     {
         var logHandles = await _handleRepository.GetAllAsync();
         return Ok(logHandles);
     }
-    [HttpGet]
-    public async Task<IActionResult> GetAllLogs()
-    {
-        var logHandles = await _handleRepository.GetAllAsync();
-        return Ok(logHandles);
-    }
-    [HttpGet]
+    
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetHandle(Guid Id)
     {
         var logHandle = await _handleRepository.GetAsync(Id);

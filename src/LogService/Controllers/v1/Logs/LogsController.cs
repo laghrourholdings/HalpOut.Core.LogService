@@ -8,7 +8,7 @@ namespace LogService.Controllers.v1.Logs;
 [Route("api/v{version:apiVersion}/[controller]/logs")]
 [ApiVersion("1.0")]
 [ApiController]
-public partial class LogsController : ControllerBase
+public class LogsController : ControllerBase
 {
     private readonly IRepository<LogHandle> _handleRepository;
     private readonly IRepository<LogMessage> _messageRepository;
