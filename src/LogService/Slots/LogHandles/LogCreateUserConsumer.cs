@@ -1,5 +1,7 @@
 ﻿using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.Contracts.Objects;
+using CommonLibrary.AspNetCore.Contracts.Users;
+using CommonLibrary.AspNetCore.Identity.Model;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.AspNetCore.Settings;
@@ -10,14 +12,14 @@ using ILogger = Serilog.ILogger;
 
 namespace LogService.Slots.LogHandles;
 
-public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
+public class LogCreateUserConsumer : IConsumer<UserCreated>
 {
     
     private readonly IRepository<LogHandle> _handleRepository;
     private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
 
-    public LogCreateObjectConsumer(
+    public LogCreateUserConsumer(
         IRepository<LogHandle> handleRepository,
         ILogger logger,
         IConfiguration configuration)
@@ -28,7 +30,7 @@ public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
     }
 
     
-    public async Task Consume(ConsumeContext<ObjectCreated> context)
+    public async Task Consume(ConsumeContext<UserCreated> context)
     {
         var payload = context.Message.Payload;
         if (payload.Subject == null)
@@ -39,30 +41,28 @@ public class LogCreateObjectConsumer : IConsumer<ObjectCreated>
         LogHandle logHandle = new LogHandle
         {
             Id = Guid.NewGuid(),
-            ObjectId = payload.Subject.Id,
+            ObjectId = new Guid(payload.Subject.Id),
             CreationDate = DateTimeOffset.Now,
             IsDeleted = false,
             DeletedDate = default,
             IsSuspended = false,
             SuspendedDate = default,
             Descriptor = $"InDB Messages",
-            ObjectType = nameof(IIObject),
+            ObjectType = nameof(User),
             AuthorizationDetails = "none",
             LocationDetails = "none"
         };
-        logHandle.LogMessage(_configuration, LogLevel.None,
-            $"Received request for object creation: {payload.Subject.Id}");
         var obj = payload.Subject;
         obj.LogHandleId = logHandle.Id;
-        var response = new ServiceBusMessageReponse<IIObject>
+        var response = new ServiceBusPayload<User>
         {
-            Contract = nameof(UpdateObjectLogHandle),
-            InitialRequest = payload,
+            Contract = nameof(UpdateUserLogHandle),
             Subject = obj,
-            Descriptor = $"LogHandleID: {logHandle.Id} assigned to : {payload.Subject}"
+            Descriptor = $"LogHandleID: {logHandle.Id} assigned to : {payload.Subject.Id} ({nameof(User)})"
         };
+        logHandle.LogMessage(_configuration, LogLevel.None,response.Descriptor);
         _logger.Information("{ResponeDescriptor}", response.Descriptor);
         await _handleRepository.CreateAsync(logHandle);
-        await context.RespondAsync(new UpdateObjectLogHandle(response));
+        await context.RespondAsync(new UpdateUserLogHandle(response));
     }
 }

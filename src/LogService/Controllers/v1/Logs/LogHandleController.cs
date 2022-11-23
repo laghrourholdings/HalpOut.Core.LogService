@@ -1,11 +1,12 @@
 ﻿using CommonLibrary.Core;
 using CommonLibrary.Logging;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using ILogger = Serilog.ILogger;
 
 namespace LogService.Controllers.v1.Logs;
 
-[Route("api/v{version:apiVersion}/Logs/handles")]
+[Route("api/v{version:apiVersion}/logs/handles")]
 [ApiVersion("1.0")]
 public class LogHandlesController : ControllerBase
 {
