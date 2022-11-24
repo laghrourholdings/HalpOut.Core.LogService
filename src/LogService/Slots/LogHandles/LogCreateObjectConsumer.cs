@@ -1,8 +1,6 @@
-﻿using CommonLibrary.AspNetCore.Contracts;
-using CommonLibrary.AspNetCore.Contracts.Objects;
+﻿using CommonLibrary.AspNetCore.Contracts.Objects;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.ServiceBus;
-using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using MassTransit;

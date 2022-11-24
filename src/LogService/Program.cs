@@ -3,7 +3,6 @@ using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
 using LogService.Logs;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

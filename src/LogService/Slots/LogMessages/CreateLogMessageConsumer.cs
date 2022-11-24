@@ -1,7 +1,4 @@
-﻿using CommonLibrary.AspNetCore.Contracts;
-using CommonLibrary.AspNetCore.Contracts.LogMessage;
-using CommonLibrary.AspNetCore.ServiceBus;
-using CommonLibrary.AspNetCore.Settings;
+﻿using CommonLibrary.AspNetCore.Contracts.LogMessage;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using MassTransit;
