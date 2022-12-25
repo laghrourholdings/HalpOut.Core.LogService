@@ -25,6 +25,5 @@ public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
         //TODO: Checks
         var logMessage = context.Message.LogMessage;
         await _messageRepository.CreateAsync(logMessage);
-        //await context.RespondAsync(new UpdateObjectLogHandle(response));
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
@@ -11,14 +12,14 @@ public class LogHandleRepository : IRepository<LogHandle>
 {
     private readonly ServiceDbContext _context;
     private readonly IRepository<LogMessage> _messageRepository;
-    private readonly ILogger _logger;
+    private readonly ILoggingService _loggingService;
 
     public LogHandleRepository(
         IRepository<LogMessage> messageRepository,
-        ServiceDbContext context, ILogger logger)
+        ServiceDbContext context, ILoggingService loggingService)
     {
         _messageRepository = messageRepository;
-        _logger = logger;
+        _loggingService = loggingService;
         _context = context;
     }
 
@@ -90,11 +91,11 @@ public class LogHandleRepository : IRepository<LogHandle>
     public async Task CreateAsync(
         LogHandle entity)
     {
-        _logger.Information("LogHandle created: {Entity}", entity);
         await _context.LogHandles.AddAsync(entity);
         if (entity.Messages != null) 
             await _context.LogMessages.AddRangeAsync(entity.Messages);
         await _context.SaveChangesAsync();
+        _loggingService.Verbose("LogHandle created",entity.Id);
     }
 
     public async Task RangeAsync(IEnumerable<LogHandle> logHandles)

@@ -28,9 +28,9 @@ public static class LogHandleSlotUtility
             AuthorizationDetails = "none",
             LocationDetails = "none"
         };
-        var logMessage = $"LogHandleID: {logHandle.Id} assigned to : {ObjectId} ({ObjectType})";
-        logHandle.AttachLogMessage(configuration, LogLevel.None, logMessage);
-        loggingService.Log().Information(logMessage);
+        // var logMessage = $"LogHandleID: {logHandle.Id} assigned to : {ObjectId} ({ObjectType})";
+        // logHandle.AttachLogMessage(configuration, LogLevel.None, logMessage);
+        // loggingService.Log().Information(logMessage);
         await handleRepository.CreateAsync(logHandle);
         return logHandle;
     }
