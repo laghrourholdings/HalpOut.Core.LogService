@@ -1,4 +1,4 @@
-﻿using CommonLibrary.AspNetCore.Contracts.LogMessage;
+﻿using CommonLibrary.AspNetCore.Contracts.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using MassTransit;
@@ -6,12 +6,12 @@ using ILogger = Serilog.ILogger;
 
 namespace LogService.Slots.LogMessages;
 
-public class LogAddMessageConsumer : IConsumer<CreateLogMessage>
+public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {
     private readonly IRepository<LogMessage> _messageRepository;
     private readonly ILogger _logger;
 
-    public LogAddMessageConsumer(
+    public CreateLogMessageConsumer(
         IRepository<LogMessage> messageRepository,
         ILogger logger)
     {
@@ -22,13 +22,9 @@ public class LogAddMessageConsumer : IConsumer<CreateLogMessage>
     
     public async Task Consume(ConsumeContext<CreateLogMessage> context)
     {
-        var payload = context.Message.Payload;
-        if (payload.Subject == null)
-        {
-            _logger.Error("No payload or no subjects attached to payload");
-            return;
-        }
-        await _messageRepository.CreateAsync(payload.Subject);
+        //TODO: Checks
+        var logMessage = context.Message.LogMessage;
+        await _messageRepository.CreateAsync(logMessage);
         //await context.RespondAsync(new UpdateObjectLogHandle(response));
     }
 }
