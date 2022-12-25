@@ -1,23 +1,23 @@
 using System.Linq.Expressions;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
 using Microsoft.EntityFrameworkCore;
-using ILogger = Serilog.ILogger;
 
 namespace LogService.Logs;
 
 public class LogMessageRepository : IRepository<LogMessage>
 {
     private readonly ServiceDbContext _context;
-    private readonly ILogger _logger;
+    private readonly ILoggingService _loggingService;
     //private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
 
     public LogMessageRepository(
         ServiceDbContext context,
-        ILogger logger)
+        ILoggingService loggingService)
     {
-        _logger = logger;
+        _loggingService = loggingService;
         _context = context;
         //_handleRepository = handleRepository;
     }
@@ -55,7 +55,7 @@ public class LogMessageRepository : IRepository<LogMessage>
         }
         await _context.LogMessages.AddAsync(logMessage);
         await _context.SaveChangesAsync();
-        _logger.Information("LogMessage created: {Entity}", logMessage);
+        _loggingService.Information($"LogMessage created: {logMessage.Id}");
     }
 
     public async Task RangeAsync(IEnumerable<LogMessage> logMessages)
@@ -63,7 +63,6 @@ public class LogMessageRepository : IRepository<LogMessage>
         var logMessagesList = logMessages.ToList();
         await _context.AddRangeAsync(logMessagesList);
         await _context.SaveChangesAsync();
-        _logger.Information("LogMessages created: {Entity}", logMessagesList);
     }
 
     public async Task UpdateAsync(LogMessage logMessage)

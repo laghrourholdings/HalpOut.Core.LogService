@@ -1,22 +1,22 @@
 ﻿using CommonLibrary.AspNetCore.Contracts.Logging;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using MassTransit;
-using ILogger = Serilog.ILogger;
 
 namespace LogService.Slots.LogMessages;
 
 public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {
     private readonly IRepository<LogMessage> _messageRepository;
-    private readonly ILogger _logger;
+    private readonly ILoggingService _loggingService;
 
     public CreateLogMessageConsumer(
         IRepository<LogMessage> messageRepository,
-        ILogger logger)
+        ILoggingService loggingService)
     {
         _messageRepository = messageRepository;
-        _logger = logger;
+        _loggingService = loggingService;
     }
 
     

@@ -4,7 +4,6 @@ using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
 using Microsoft.EntityFrameworkCore;
-using ILogger = Serilog.ILogger;
 
 namespace LogService.Logs;
 

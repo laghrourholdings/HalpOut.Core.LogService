@@ -1,14 +1,9 @@
 ﻿using CommonLibrary.AspNetCore.Contracts.Logging;
-using CommonLibrary.AspNetCore.Contracts.Users;
-using CommonLibrary.AspNetCore.Identity.Model;
-using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.Logging.LoggingService;
-using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.Slots.LogHandles.Utilities;
 using MassTransit;
-using ILogger = Serilog.ILogger;
 
 namespace LogService.Slots.LogHandles;
 
