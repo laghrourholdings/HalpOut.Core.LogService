@@ -3,9 +3,9 @@ using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using LogService.EFCore;
-using LogService.Logs;
+using LogService.Logging;
 using Serilog;
-using LoggingService = LogService.Implementations.LoggingService;
+using LoggingService = LogService.Logging.LoggingService;
 
 var builder = WebApplication.CreateBuilder(args);
 

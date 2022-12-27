@@ -22,10 +22,9 @@
         <ProjectReference Include="..\..\..\CommonLibrary\src\CommonLibrary.AspNetCore\CommonLibrary.AspNetCore.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Logs\Implementations" />
-      <Folder Include="Logs\Interfaces" />
+      <Folder Include="Logging\Interfaces" />
       <Folder Include="Migrations" />
-      <Folder Include="Signals" />
+      <Folder Include="ServiceBus\Consumer Contracts\Logging" />
     </ItemGroup>
 
 </Project>

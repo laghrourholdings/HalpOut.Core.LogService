@@ -2,7 +2,7 @@
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 
-namespace LogService.Slots.LogHandles.Utilities;
+namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 
 public static class LogHandleSlotUtility
 {

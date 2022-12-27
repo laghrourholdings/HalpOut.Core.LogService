@@ -5,7 +5,7 @@ using CommonLibrary.Logging;
 using LogService.EFCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace LogService.Logs;
+namespace LogService.Logging;
 
 public class LogHandleRepository : IRepository<LogHandle>
 {

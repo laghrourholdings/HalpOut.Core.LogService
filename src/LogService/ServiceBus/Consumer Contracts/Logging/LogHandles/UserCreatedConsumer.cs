@@ -1,11 +1,11 @@
-﻿using CommonLibrary.AspNetCore.Contracts.Users;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+using CommonLibrary.AspNetCore.ServiceBus.Contracts.Users;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
-using LogService.Slots.LogHandles.Utilities;
+using LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 using MassTransit;
 
-namespace LogService.Slots.LogHandles;
+namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles;
 
 public class UserCreatedConsumer : IConsumer<UserCreated>
 {

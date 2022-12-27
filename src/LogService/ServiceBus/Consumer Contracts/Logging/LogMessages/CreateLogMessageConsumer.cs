@@ -1,10 +1,10 @@
-﻿using CommonLibrary.AspNetCore.Contracts.Logging;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using MassTransit;
 
-namespace LogService.Slots.LogMessages;
+namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogMessages;
 
 public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {

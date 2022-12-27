@@ -1,20 +1,20 @@
-﻿using CommonLibrary.AspNetCore.Contracts.Objects;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
-using LogService.Slots.LogHandles.Utilities;
+using LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 using MassTransit;
 
-namespace LogService.Slots.LogHandles;
+namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles;
 
-public class ObjectCreatedConsumer : IConsumer<ObjectCreated>
+public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
 {
     
     private readonly IRepository<LogHandle> _handleRepository;
     private readonly ILoggingService _loggingService;
     private readonly IConfiguration _configuration;
 
-    public ObjectCreatedConsumer(
+    public CreateLogHandleConsumer(
         IRepository<LogHandle> handleRepository,
         ILoggingService loggingService,
         IConfiguration configuration)
@@ -25,11 +25,10 @@ public class ObjectCreatedConsumer : IConsumer<ObjectCreated>
     }
 
     
-    public async Task Consume(ConsumeContext<ObjectCreated> context)
+    public async Task Consume(ConsumeContext<CreateLogHandle> context)
     {
         var logHandle = await LogHandleSlotUtility.GenerateLogHandleAsync(
-            context.Message.ObjectId, "Internal Object",
+            context.Message.ObjectId, context.Message.ObjectType,
             _configuration, _loggingService, _handleRepository);
-        await context.RespondAsync(new UpdateObjectLogHandle(logHandle.ObjectId, logHandle.Id));
     }
 }
