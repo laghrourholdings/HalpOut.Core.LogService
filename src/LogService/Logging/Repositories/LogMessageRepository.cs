@@ -10,14 +10,13 @@ namespace LogService.Logging;
 public class LogMessageRepository : IRepository<LogMessage>
 {
     private readonly ServiceDbContext _context;
-    private readonly ILoggingService _loggingService;
+   // private readonly ILoggingService _loggingService;
     //private readonly IRepository<CommonLibrary.Logging.LogHandle> _handleRepository;
 
     public LogMessageRepository(
-        ServiceDbContext context,
-        ILoggingService loggingService)
+        ServiceDbContext context)
     {
-        _loggingService = loggingService;
+        //_loggingService = loggingService;
         _context = context;
         //_handleRepository = handleRepository;
     }
@@ -55,7 +54,6 @@ public class LogMessageRepository : IRepository<LogMessage>
         }
         await _context.LogMessages.AddAsync(logMessage);
         await _context.SaveChangesAsync();
-        _loggingService.Information($"LogMessage created: {logMessage.Id}");
     }
 
     public async Task RangeAsync(IEnumerable<LogMessage> logMessages)

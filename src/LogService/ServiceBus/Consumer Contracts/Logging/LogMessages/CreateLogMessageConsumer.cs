@@ -9,14 +9,11 @@ namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogMessages;
 public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {
     private readonly IRepository<LogMessage> _messageRepository;
-    private readonly ILoggingService _loggingService;
 
     public CreateLogMessageConsumer(
-        IRepository<LogMessage> messageRepository,
-        ILoggingService loggingService)
+        IRepository<LogMessage> messageRepository)
     {
         _messageRepository = messageRepository;
-        _loggingService = loggingService;
     }
 
     

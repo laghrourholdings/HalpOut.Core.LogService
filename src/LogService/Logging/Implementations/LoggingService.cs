@@ -33,7 +33,7 @@ public class LoggingService : ILoggingService
     }
     
     /// <summary>
-    /// Assigns a message for a provided logHandleId to the log message repository for creation. 
+    /// Assigns a message for a provided logHandleId and forwards to the log message repository for creation. 
     /// </summary>
     /// <param name="message">Log message</param>
     /// <param name="logHandleId">Important: Must be provided if the message's target object has a logHandleId field</param>
@@ -41,6 +41,14 @@ public class LoggingService : ILoggingService
     {
         var logMessage = LogMessageExtentions.GetLogMessage(_config, severity, logHandleId, message);
         _repository.CreateAsync(logMessage);
+    }
+    /// <summary>
+    /// Assigns a message for a provided logMessage and forwards to the log message repository for creation. 
+    /// </summary>
+    /// <param name="message">Log message</param>
+    public void AssignMessage(LogMessage message)
+    {
+        _repository.CreateAsync(message);
     }
     
     //TODO Checks with cache to see if the logHandleId is valid
