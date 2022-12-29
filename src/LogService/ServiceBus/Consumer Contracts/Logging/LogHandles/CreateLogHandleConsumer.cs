@@ -2,6 +2,7 @@
 using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
+using CommonLibrary.Logging.Models;
 using LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 using MassTransit;
 

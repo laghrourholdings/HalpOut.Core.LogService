@@ -1,6 +1,7 @@
 ﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
+using CommonLibrary.Logging.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogService.Controllers.v1.Logs;

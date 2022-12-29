@@ -1,6 +1,7 @@
 ﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
+using CommonLibrary.Logging.Models;
 
 namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 

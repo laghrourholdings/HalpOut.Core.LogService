@@ -1,5 +1,6 @@
 ﻿using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Logging;
+using CommonLibrary.Logging.Models;
 using CommonLibrary.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
 
