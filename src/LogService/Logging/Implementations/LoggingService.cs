@@ -28,7 +28,7 @@ public class LoggingService : ILoggingService
         _logger = logger;
         _repository = repository;
     }
-    public Serilog.ILogger Log()
+    public Serilog.ILogger Local()
     {
         return _logger;
     }
