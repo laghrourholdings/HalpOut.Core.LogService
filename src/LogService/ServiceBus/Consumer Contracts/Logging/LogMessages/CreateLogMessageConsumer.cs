@@ -1,7 +1,5 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
-using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
+﻿using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
 using CommonLibrary.Core;
-using CommonLibrary.Logging;
 using CommonLibrary.Logging.Models;
 using MassTransit;
 

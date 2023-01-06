@@ -1,7 +1,5 @@
 using System.Linq.Expressions;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
-using CommonLibrary.Logging;
 using CommonLibrary.Logging.Models;
 using LogService.EFCore;
 using Microsoft.EntityFrameworkCore;
