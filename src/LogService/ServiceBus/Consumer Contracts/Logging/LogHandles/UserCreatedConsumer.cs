@@ -1,4 +1,4 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿/*using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.AspNetCore.ServiceBus.Contracts.Users;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
@@ -28,8 +28,8 @@ public class UserCreatedConsumer : IConsumer<UserCreated>
     public async Task Consume(ConsumeContext<UserCreated> context)
     {
         var userId = context.Message.UserId;
-        var logHandle = await LogHandleSlotUtility.GenerateLogHandleAsync(
+        var logHandleId = context.Message.UserId;
+        var logHandle = await LogHandleSlotUtility.GenerateLogHandleAsync(logHandleId,
                 userId, "User", _configuration, _loggingService, _handleRepository);
-        await context.RespondAsync(new UpdateUserLogHandle(context.Message.UserId, logHandle.Id));
     }
-}
+}*/

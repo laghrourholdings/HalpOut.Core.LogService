@@ -7,6 +7,7 @@ namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 public static class LogHandleSlotUtility
 {
     public static async Task<LogHandle> GenerateLogHandleAsync(
+        Guid LogHandleId,
         Guid ObjectId,
         string ObjectType,
         IConfiguration configuration,
@@ -15,7 +16,7 @@ public static class LogHandleSlotUtility
     {
         LogHandle logHandle = new LogHandle
         {
-            Id = Guid.NewGuid(),
+            LogHandleId =LogHandleId,
             ObjectId = ObjectId,
             CreationDate = DateTimeOffset.Now,
             IsDeleted = false,

@@ -27,7 +27,7 @@ public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
     
     public async Task Consume(ConsumeContext<CreateLogHandle> context)
     {
-        var logHandle = await LogHandleSlotUtility.GenerateLogHandleAsync(
+        await LogHandleSlotUtility.GenerateLogHandleAsync(context.Message.logHandleId,
             context.Message.ObjectId, context.Message.ObjectType,
             _configuration, _loggingService, _handleRepository);
     }

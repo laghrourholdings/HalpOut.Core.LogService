@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -13,21 +14,25 @@ namespace LogService.Migrations
                 name: "LogHandles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    LogHandleId = table.Column<Guid>(type: "uuid", nullable: false),
                     ObjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     IsSuspended = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    DeletedBy = table.Column<Guid>(type: "uuid", nullable: false),
                     SuspendedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    Descriptor = table.Column<string>(type: "text", nullable: true),
+                    SuspendedBy = table.Column<Guid>(type: "uuid", nullable: false),
                     ObjectType = table.Column<string>(type: "text", nullable: false),
                     LocationDetails = table.Column<string>(type: "text", nullable: true),
-                    AuthorizationDetails = table.Column<string>(type: "text", nullable: true)
+                    AuthorizationDetails = table.Column<string>(type: "text", nullable: true),
+                    Descriptor = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LogHandles", x => x.Id);
+                    table.PrimaryKey("PK_LogHandles", x => x.LogHandleId);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,14 +40,10 @@ namespace LogService.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    DeletedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    IsSuspended = table.Column<bool>(type: "boolean", nullable: false),
-                    SuspendedDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     LogHandleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Severity = table.Column<int>(type: "integer", nullable: false),
                     Descriptor = table.Column<string>(type: "text", nullable: true),
-                    Severity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,8 +52,7 @@ namespace LogService.Migrations
                         name: "FK_LogMessages_LogHandles_LogHandleId",
                         column: x => x.LogHandleId,
                         principalTable: "LogHandles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "LogHandleId");
                 });
 
             migrationBuilder.CreateIndex(

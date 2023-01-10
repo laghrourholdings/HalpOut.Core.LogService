@@ -17,16 +17,18 @@ namespace LogService.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CommonLibrary.Logging.LogHandle", b =>
+            modelBuilder.Entity("CommonLibrary.Logging.Models.LogHandle", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AuthorizationDetails")
                         .HasColumnType("text");
@@ -52,6 +54,9 @@ namespace LogService.Migrations
                     b.Property<string>("LocationDetails")
                         .HasColumnType("text");
 
+                    b.Property<Guid>("LogHandleId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ObjectId")
                         .HasColumnType("uuid");
 
@@ -70,7 +75,7 @@ namespace LogService.Migrations
                     b.ToTable("LogHandles");
                 });
 
-            modelBuilder.Entity("CommonLibrary.Logging.LogMessage", b =>
+            modelBuilder.Entity("CommonLibrary.Logging.Models.LogMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,6 +90,9 @@ namespace LogService.Migrations
                     b.Property<Guid>("LogHandleId")
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("LogHandleId1")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Severity")
                         .HasColumnType("integer");
 
@@ -95,16 +103,14 @@ namespace LogService.Migrations
                     b.ToTable("LogMessages");
                 });
 
-            modelBuilder.Entity("CommonLibrary.Logging.LogMessage", b =>
+            modelBuilder.Entity("CommonLibrary.Logging.Models.LogMessage", b =>
                 {
-                    b.HasOne("CommonLibrary.Logging.LogHandle", null)
+                    b.HasOne("CommonLibrary.Logging.Models.LogHandle", null)
                         .WithMany("Messages")
-                        .HasForeignKey("LogHandleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LogHandleId");
                 });
 
-            modelBuilder.Entity("CommonLibrary.Logging.LogHandle", b =>
+            modelBuilder.Entity("CommonLibrary.Logging.Models.LogHandle", b =>
                 {
                     b.Navigation("Messages");
                 });
