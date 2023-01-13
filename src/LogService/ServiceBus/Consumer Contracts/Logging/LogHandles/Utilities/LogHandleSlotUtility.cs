@@ -1,33 +1,21 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using AutoMapper;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
-using CommonLibrary.Logging.Models;
+using CommonLibrary.Logging.Models.Dtos;
+using LogHandle = LogService.Logging.Models.LogHandle;
 
 namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 
 public static class LogHandleSlotUtility
 {
     public static async Task<LogHandle> GenerateLogHandleAsync(
-        Guid LogHandleId,
-        Guid ObjectId,
-        string ObjectType,
+        LogHandleDto logHandleDto,
+        IMapper mapper,
         IConfiguration configuration,
         ILoggingService loggingService, 
         IRepository<LogHandle> handleRepository )
     {
-        LogHandle logHandle = new LogHandle
-        {
-            LogHandleId =LogHandleId,
-            ObjectId = ObjectId,
-            CreationDate = DateTimeOffset.Now,
-            IsDeleted = false,
-            DeletedDate = default,
-            IsSuspended = false,
-            SuspendedDate = default,
-            Descriptor = $"InDB Messages",
-            ObjectType = ObjectType,
-            AuthorizationDetails = "none",
-            LocationDetails = "none"
-        };
+        LogHandle logHandle = _;
         // var logMessage = $"LogHandleID: {logHandle.Id} assigned to : {ObjectId} ({ObjectType})";
         // logHandle.AttachLogMessage(configuration, LogLevel.None, logMessage);
         // loggingService.Log().Information(logMessage);

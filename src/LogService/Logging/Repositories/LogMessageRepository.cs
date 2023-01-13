@@ -33,7 +33,7 @@ public class LogMessageRepository : IRepository<LogMessage>
         return logMessages.Count == 0 ? null : logMessages;
     }
 
-    public async Task<LogMessage?> GetAsync(Guid Id)
+    public async Task<LogMessage?> GetAsync(Int64 Id)
     {
         return await _context.LogMessages.SingleOrDefaultAsync(x => x.Id == Id);
     }
@@ -48,11 +48,9 @@ public class LogMessageRepository : IRepository<LogMessage>
         var existantLogMessage = await GetAsync(logMessage.Id);
         if (existantLogMessage != null)
         {
-            logMessage.Id = Guid.NewGuid();
-            logMessage.Descriptor = logMessage.Descriptor?.Insert(0,"[Id already exists - duplicate] ");
+            await _context.LogMessages.AddAsync(logMessage);
+            await _context.SaveChangesAsync();
         }
-        await _context.LogMessages.AddAsync(logMessage);
-        await _context.SaveChangesAsync();
     }
 
     public async Task RangeAsync(IEnumerable<LogMessage> logMessages)

@@ -1,5 +1,6 @@
 ﻿using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.Logging.LoggingService;
+using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
 using MassTransit;
@@ -31,7 +32,17 @@ public class LoggingService : ILoggingService
     {
         return _logger;
     }
-    
+    public LogMessage GetLogMessage(LogLevel severity, Guid logHandleId, string message )
+    {
+        ServiceSettings serviceSettings = _config.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>() ?? throw new InvalidOperationException("ServiceSettings is null");
+        return new LogMessage
+        {
+            CreationDate = DateTimeOffset.Now,
+            LogHandleId = logHandleId,
+            Message = $"{serviceSettings.ServiceName} | {message}",
+            Severity = severity
+        };
+    }
     /// <summary>
     /// Assigns a message for a provided logHandleId and forwards to the log message repository for creation. 
     /// </summary>
@@ -39,7 +50,7 @@ public class LoggingService : ILoggingService
     /// <param name="logHandleId">Important: Must be provided if the message's target object has a logHandleId field</param>
     private void AssignMessage(string message,LogLevel severity, Guid logHandleId)
     {
-        var logMessage = LogMessageExtentions.GetLogMessage(_config, severity, logHandleId, message);
+        var logMessage = GetLogMessage(severity, logHandleId, message);
         _repository.CreateAsync(logMessage);
     }
     /// <summary>
