@@ -1,6 +1,7 @@
 ﻿using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Logging.Models;
 using CommonLibrary.ModelBuilders;
+using LogService.Logging.Models;
 using Microsoft.EntityFrameworkCore;
 using LogHandle = LogService.Logging.Models.LogHandle;
 

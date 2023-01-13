@@ -1,4 +1,4 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿/*using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +33,7 @@ public class LogsMessagesController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetMessage(Guid Id)
     {
-        var logMessages = await _messageRepository.GetAsync(Id);
+        var logMessages = await _messageRepository.GetAsync();
         return Ok(logMessages);
     }
-}
+}*/

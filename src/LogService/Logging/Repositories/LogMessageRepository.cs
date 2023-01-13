@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+/*using System.Linq.Expressions;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
 using LogService.EFCore;
@@ -70,4 +70,4 @@ public class LogMessageRepository : IRepository<LogMessage>
     {
         throw new NotImplementedException();
     }
-}
+}*/

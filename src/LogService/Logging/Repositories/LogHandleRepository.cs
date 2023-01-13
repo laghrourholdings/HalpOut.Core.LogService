@@ -1,9 +1,11 @@
+using System.Collections;
 using System.Linq.Expressions;
 using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using CommonLibrary.Logging.Models;
 using LogService.EFCore;
+using LogService.Logging.Models;
 using Microsoft.EntityFrameworkCore;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
@@ -26,30 +28,31 @@ public class LogHandleRepository : IRepository<LogHandle>
 
     public async Task<IEnumerable<LogHandle>?> GetAllAsync()
     {
-        var logHandles = await _context.LogHandles.ToListAsync();
-        if (logHandles.Count == 0)
+        var logHandles = _context.LogHandles.Include(x=>x.Messages).Select(x=>x);
+        if (!logHandles.Any())
         {
             return null;
         }
-        foreach (var logHandle in logHandles)
-        {
-            var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
-            if (logMessages != null)
-                logHandle.Messages = logMessages;
-            else
-                logHandle.Messages = null;
-        }
+        // foreach (var logHandle in logHandles)
+        // {
+        //     var logMessages = _
+        //     if (logMessages != null)
+        //         logHandle.Messages = logMessages.ToHashSet();
+        //     else
+        //         logHandle.Messages = null;
+        // }
         return logHandles;
     }
 
     public async Task<IEnumerable<LogHandle>?> GetAllAsync(
         Expression<Func<LogHandle, bool>> filter)
     {
-        var logHandles = await _context.LogHandles.Where(filter).ToListAsync();
-        if (logHandles.Count == 0)
+        var logHandles = await _context.LogHandles.Include(x=>x.Messages).Where(filter).ToListAsync();
+        if (!logHandles.Any())
         {
             return null;
         }
+        /*
         foreach (var logHandle in logHandles)
         {
             var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
@@ -57,35 +60,33 @@ public class LogHandleRepository : IRepository<LogHandle>
                 logHandle.Messages = logMessages.ToList();
             else
                 logHandle.Messages = null;
-        }
+        }*/
         return logHandles;
     }
 
     public async Task<LogHandle?> GetAsync(
         Guid Id)
     {
-        var logHandle = await _context.LogHandles.SingleOrDefaultAsync(x => x.LogHandleId == Id);
+        var logHandle = await _context.LogHandles.Include(x=>x.Messages).SingleOrDefaultAsync(x => x.LogHandleId == Id);
         if (logHandle == null)
             return null;
-        var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
-        if (logMessages != null)
-            logHandle.Messages = logMessages.ToList();
-        else
-            logHandle.Messages = null;
+        // var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
+        // if (logMessages != null)
+        //     logHandle.Messages = logMessages.ToList();
+        // else
+        //     logHandle.Messages = null;
         return logHandle;
     }
 
     public async Task<LogHandle?> GetAsync(
         Expression<Func<LogHandle, bool>> filter)
     {
-        var logHandle = await _context.LogHandles.SingleOrDefaultAsync(filter);
-        if (logHandle == null)
-            return null;
-        var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
-        if (logMessages != null)
-            logHandle.Messages = logMessages.ToList();
-        else
-            logHandle.Messages = null;
+        var logHandle = await _context.LogHandles.Include(x=>x.Messages).SingleOrDefaultAsync(filter);
+        // var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
+        // if (logMessages != null)
+        //     logHandle.Messages = logMessages.ToList();
+        // else
+        //     logHandle.Messages = null;
         return logHandle;
     }
 
@@ -94,19 +95,16 @@ public class LogHandleRepository : IRepository<LogHandle>
     {
         await _context.LogHandles.AddAsync(entity);
         await _context.SaveChangesAsync();
-        if (entity.Messages != null) 
-            await _context.LogMessages.AddRangeAsync(entity.Messages);
-        await _context.SaveChangesAsync();
+        // if (entity.Messages != null) 
+        //     await _context.LogMessages.AddRangeAsync(entity.Messages);
+        // await _context.SaveChangesAsync();
         _loggingService.Verbose("LogHandle created",entity.LogHandleId);
     }
 
     public async Task RangeAsync(IEnumerable<LogHandle> logHandles)
     {
         await _context.AddRangeAsync(logHandles);
-        foreach (var logHandle in logHandles)
-        {
-            if (logHandle.Messages != null) await _context.LogMessages.AddRangeAsync(logHandle.Messages);
-        }
+        await _context.SaveChangesAsync();
     }
 
     string GetMessage(

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CommonLibrary.Logging.Models;
+namespace LogService.Logging.Models;
 
  /// <summary>
     /// Default implementation for the ILogMessage BOI
@@ -9,7 +9,7 @@ namespace CommonLibrary.Logging.Models;
 public class LogMessage //: ILogMessage, IEquatable<LogMessage>
 {
     public Int64 Id { get; set; }
-    public Int64 LogHandleId { get; set; }
+    public Guid LogHandleId { get; set; }
     public DateTimeOffset CreationDate { get; set; }
     public LogLevel Severity { get; set; }
     public string? Message { get; set; }
@@ -32,6 +32,6 @@ public class LogMessage //: ILogMessage, IEquatable<LogMessage>
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Id, LogHandleId, CreationDate, (int)Severity, Message);
+        return HashCode.Combine(LogHandleId, CreationDate, (int)Severity, Message);
     }
 }

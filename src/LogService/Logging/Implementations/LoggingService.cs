@@ -3,6 +3,7 @@ using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
+using LogService.Logging.Models;
 using MassTransit;
 
 namespace LogService.Logging;
