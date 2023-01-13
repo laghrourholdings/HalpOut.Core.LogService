@@ -8,7 +8,7 @@ namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 
 public static class LogHandleSlotUtility
 {
-    public static async Task<LogHandle> GenerateLogHandleAsync(
+    /*public static async Task<LogHandle> GenerateLogHandleAsync(
         LogHandleDto logHandleDto,
         IMapper mapper,
         IConfiguration configuration,
@@ -21,5 +21,5 @@ public static class LogHandleSlotUtility
         // loggingService.Log().Information(logMessage);
         await handleRepository.CreateAsync(logHandle);
         return logHandle;
-    }
+    }*/
 }

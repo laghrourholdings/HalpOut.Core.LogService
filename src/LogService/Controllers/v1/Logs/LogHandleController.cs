@@ -1,6 +1,7 @@
 ﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
+using LogService.Logging.Models;
 using Microsoft.AspNetCore.Mvc;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
@@ -33,7 +34,7 @@ public class LogHandlesController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetHandle(Guid Id)
     {
-        var logHandle = await _handleRepository.GetAsync(Id);
+        var logHandle = await _handleRepository.GetAsync(x=>x.LogHandleId == Id);
         return Ok(logHandle);
     }
 }

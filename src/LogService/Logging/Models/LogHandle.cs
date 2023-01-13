@@ -1,4 +1,7 @@
-﻿namespace LogService.Logging.Models;
+using System.ComponentModel.DataAnnotations;
+using CommonLibrary.Logging.Models;
+
+namespace LogService.Logging.Models;
 
 /// <summary>
 /// The LogHandle class is the default implementation of the ILogHandle

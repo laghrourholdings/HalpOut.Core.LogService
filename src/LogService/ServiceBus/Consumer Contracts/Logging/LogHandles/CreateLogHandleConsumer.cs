@@ -31,8 +31,10 @@ public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
     public async Task Consume(ConsumeContext<CreateLogHandle> context)
     {
         var logHandleDto = context.Message.LogHandleDto;
-        await LogHandleSlotUtility.GenerateLogHandleAsync(logHandleDto.Id,
-            logHandleDto.ObjectId, context.Message.ObjectType,
-            _configuration, _loggingService, _handleRepository);
+        var logHandle = _mapper.Map<LogHandle>(logHandleDto);
+        await _handleRepository.CreateAsync(logHandle);
+        // await LogHandleSlotUtility.GenerateLogHandleAsync(logHandleDto.Id,
+        //     logHandleDto.ObjectId, logHandleDto.ObjectType,
+        //     _configuration, _loggingService, _handleRepository);
     }
 }
