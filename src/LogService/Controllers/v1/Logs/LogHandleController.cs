@@ -2,6 +2,7 @@
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
 using Microsoft.AspNetCore.Mvc;
+using LogHandle = LogService.Logging.Models.LogHandle;
 
 namespace LogService.Controllers.v1.Logs;
 

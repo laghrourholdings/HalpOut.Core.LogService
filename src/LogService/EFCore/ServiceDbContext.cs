@@ -2,6 +2,7 @@
 using CommonLibrary.Logging.Models;
 using CommonLibrary.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
+using LogHandle = LogService.Logging.Models.LogHandle;
 
 namespace LogService.EFCore;
 

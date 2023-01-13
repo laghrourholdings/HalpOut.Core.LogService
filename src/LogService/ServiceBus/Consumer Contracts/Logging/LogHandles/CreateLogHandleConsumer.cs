@@ -1,24 +1,27 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using AutoMapper;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
 using CommonLibrary.Core;
-using CommonLibrary.Logging.Models;
 using LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 using MassTransit;
+using LogHandle = LogService.Logging.Models.LogHandle;
 
 namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles;
 
 public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
 {
-    
+    private readonly IMapper _mapper;
     private readonly IRepository<LogHandle> _handleRepository;
     private readonly ILoggingService _loggingService;
     private readonly IConfiguration _configuration;
 
     public CreateLogHandleConsumer(
+        IMapper mapper,
         IRepository<LogHandle> handleRepository,
         ILoggingService loggingService,
         IConfiguration configuration)
     {
+        _mapper = mapper;
         _handleRepository = handleRepository;
         _loggingService = loggingService;
         _configuration = configuration;
@@ -27,8 +30,9 @@ public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
     
     public async Task Consume(ConsumeContext<CreateLogHandle> context)
     {
-        await LogHandleSlotUtility.GenerateLogHandleAsync(context.Message.logHandleId,
-            context.Message.ObjectId, context.Message.ObjectType,
+        var logHandleDto = context.Message.LogHandleDto;
+        await LogHandleSlotUtility.GenerateLogHandleAsync(logHandleDto.Id,
+            logHandleDto.ObjectId, context.Message.ObjectType,
             _configuration, _loggingService, _handleRepository);
     }
 }

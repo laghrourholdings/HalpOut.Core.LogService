@@ -6,6 +6,7 @@ using LogService.EFCore;
 using LogService.Logging;
 using Serilog;
 using LoggingService = LogService.Logging.LoggingService;
+using LogHandle = LogService.Logging.Models.LogHandle;
 
 var builder = WebApplication.CreateBuilder(args);
 
