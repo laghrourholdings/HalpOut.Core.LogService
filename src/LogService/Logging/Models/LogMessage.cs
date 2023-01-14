@@ -9,7 +9,8 @@ namespace LogService.Logging.Models;
 public class LogMessage //: ILogMessage, IEquatable<LogMessage>
 {
     public Int64 Id { get; set; }
-    public Guid LogHandleId { get; set; }
+    public Int64 LogHandleId { get; set; }
+    public LogHandle LogHandle { get; set; }
     public DateTimeOffset CreationDate { get; set; }
     public LogLevel Severity { get; set; }
     public string? Message { get; set; }
