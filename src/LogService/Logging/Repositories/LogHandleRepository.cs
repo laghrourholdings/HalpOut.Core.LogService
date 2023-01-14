@@ -14,15 +14,9 @@ namespace LogService.Logging;
 public class LogHandleRepository : IRepository<LogHandle>
 {
     private readonly ServiceDbContext _context;
-    private readonly IRepository<LogMessage> _messageRepository;
-    private readonly ILoggingService _loggingService;
-
     public LogHandleRepository(
-        IRepository<LogMessage> messageRepository,
-        ServiceDbContext context, ILoggingService loggingService)
+        ServiceDbContext context)
     {
-        _messageRepository = messageRepository;
-        _loggingService = loggingService;
         _context = context;
     }
 
@@ -98,7 +92,7 @@ public class LogHandleRepository : IRepository<LogHandle>
         // if (entity.Messages != null) 
         //     await _context.LogMessages.AddRangeAsync(entity.Messages);
         // await _context.SaveChangesAsync();
-        _loggingService.Verbose("LogHandle created",entity.LogHandleId);
+        //_loggingService.Verbose("LogHandle created",entity.LogHandleId);
     }
 
     public async Task RangeAsync(IEnumerable<LogHandle> logHandles)
@@ -113,10 +107,11 @@ public class LogHandleRepository : IRepository<LogHandle>
         return handler.ToString();
     }
 
-    public Task UpdateAsync(
+    public async Task UpdateAsync(
         LogHandle entity)
     {
-        throw new NotImplementedException();
+        _context.LogHandles.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateOrCreateAsync(

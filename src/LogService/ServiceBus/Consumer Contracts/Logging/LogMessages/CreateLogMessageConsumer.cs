@@ -2,6 +2,7 @@
 using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
+using CommonLibrary.Logging.Models.Dtos;
 using LogService.Logging.Models;
 using MassTransit;
 
@@ -10,14 +11,14 @@ namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogMessages;
 public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<LogMessage> _messageRepository;
+    private readonly IRepository<LogHandle> _repository;
 
     public CreateLogMessageConsumer(
         IMapper mapper,
-        IRepository<LogMessage> messageRepository)
+        IRepository<LogHandle> repository)
     {
         _mapper = mapper;
-        _messageRepository = messageRepository;
+        _repository = repository;
     }
 
     
@@ -25,6 +26,13 @@ public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
     {
         //TODO: Checks
         var logMessage = context.Message.LogMessage;
-        await _messageRepository.CreateAsync(_mapper.Map<LogMessage>(logMessage));
+        var logHandleId = context.Message.LogHandleId;
+        var logMessageEntity = _mapper.Map<LogMessageDto,LogMessage>(logMessage);
+        var logHandle = await _repository.GetAsync(x => x.LogHandleId == logHandleId);
+        if (logHandle != null)
+        {
+            logHandle.Messages.Add(logMessageEntity);
+            await _repository.UpdateAsync(logHandle);
+        }
     }
 }

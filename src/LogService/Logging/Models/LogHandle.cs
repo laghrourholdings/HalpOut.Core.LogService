@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using CommonLibrary.Logging.Models;
+using CommonLibrary.Logging.Models.Dtos;
 
 namespace LogService.Logging.Models;
 
@@ -46,5 +47,19 @@ public class LogHandle //: ILogHandle<LogMessage,List<LogMessage>>, IEquatable<L
     public override int GetHashCode()
     {
         return HashCode.Combine(LogHandleId, ObjectId);
+    }
+
+    public static LogHandle FromDto(LogHandleDto logHandleDto)
+    {
+        return new LogHandle()
+        {
+            LogHandleId = logHandleDto.LogHandleId,
+            ObjectId = logHandleDto.ObjectId,
+            ObjectType = logHandleDto.ObjectType,
+            LocationDetails = logHandleDto.LocationDetails,
+            AuthorizationDetails = logHandleDto.AuthorizationDetails,
+            Descriptor = logHandleDto.Descriptor,
+            CreationDate = logHandleDto.CreationDate
+        };
     }
 }

@@ -16,13 +16,13 @@ public class LoggingService : ILoggingService
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IConfiguration _config;
     private readonly Serilog.ILogger _logger;
-    private readonly IRepository<LogMessage> _repository;
+    private readonly IRepository<LogHandle> _repository;
     // 
     public LoggingService(
         IPublishEndpoint publishEndpoint,
         IConfiguration config,
         Serilog.ILogger logger,
-        IRepository<LogMessage> repository)
+        IRepository<LogHandle> repository)
     {
         _publishEndpoint = publishEndpoint;
         _config = config;
@@ -33,13 +33,12 @@ public class LoggingService : ILoggingService
     {
         return _logger;
     }
-    public LogMessage GetLogMessage(LogLevel severity, Guid logHandleId, string message )
+    public LogMessage GetLogMessage(LogLevel severity, string message )
     {
         ServiceSettings serviceSettings = _config.GetSection(nameof(ServiceSettings)).Get<ServiceSettings>() ?? throw new InvalidOperationException("ServiceSettings is null");
         return new LogMessage
         {
             CreationDate = DateTimeOffset.Now,
-            LogHandleId = logHandleId,
             Message = $"{serviceSettings.ServiceName} | {message}",
             Severity = severity
         };
@@ -49,19 +48,24 @@ public class LoggingService : ILoggingService
     /// </summary>
     /// <param name="message">Log message</param>
     /// <param name="logHandleId">Important: Must be provided if the message's target object has a logHandleId field</param>
-    private void AssignMessage(string message,LogLevel severity, Guid logHandleId)
+    private async void AssignMessage(string message,LogLevel severity, Guid logHandleId)
     {
-        var logMessage = GetLogMessage(severity, logHandleId, message);
-        _repository.CreateAsync(logMessage);
+        var logHandle = await _repository.GetAsync(x => x.LogHandleId == logHandleId);
+        if (logHandle != null)
+        {
+            logHandle.Messages.Add(GetLogMessage(severity, message));
+            await _repository.UpdateAsync(logHandle);
+        }
+
     }
     /// <summary>
     /// Assigns a message for a provided logMessage and forwards to the log message repository for creation. 
     /// </summary>
     /// <param name="message">Log message</param>
-    public void AssignMessage(LogMessage message)
+    /*public void AssignMessage(LogMessage message)
     {
         _repository.CreateAsync(message);
-    }
+    }*/
     
     //TODO Checks with cache to see if the logHandleId is valid
     /// <summary>

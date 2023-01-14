@@ -1,6 +1,8 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using AutoMapper;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
+using CommonLibrary.Logging.Models.Dtos;
 using LogService.Logging.Models;
 using Microsoft.AspNetCore.Mvc;
 using LogHandle = LogService.Logging.Models.LogHandle;
@@ -11,24 +13,25 @@ namespace LogService.Controllers.v1.Logs;
 [ApiVersion("1.0")]
 public class LogHandlesController : ControllerBase
 {
+    private readonly IMapper _mapper;
     private readonly IRepository<LogHandle> _handleRepository;
-    private readonly IRepository<LogMessage> _messageRepository;
     private readonly ILoggingService _loggingService;
 
     public LogHandlesController(
+        IMapper mapper,
         IRepository<LogHandle> handleRepository,
-        IRepository<LogMessage> messageRepository,
         ILoggingService loggingService)
     {
+        _mapper = mapper;
         _handleRepository = handleRepository;
-        _messageRepository = messageRepository;
         _loggingService = loggingService;
     }
     [HttpGet]
     public async Task<IActionResult> GetAllHandles()
     {
         var logHandles = await _handleRepository.GetAllAsync();
-        return Ok(logHandles);
+        var logHandlesDto = logHandles.Select(x => _mapper.Map<LogHandle, LogHandleDto>(x));
+        return Ok(logHandlesDto);
     }
     
     [HttpGet("{id:guid}")]
