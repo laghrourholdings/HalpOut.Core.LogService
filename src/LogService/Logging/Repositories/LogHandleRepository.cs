@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Linq.Expressions;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using CommonLibrary.Logging;
 using CommonLibrary.Logging.Models;
-using LogService.EFCore;
+using LogService.Core;
 using LogService.Logging.Models;
 using Microsoft.EntityFrameworkCore;
 using LogHandle = LogService.Logging.Models.LogHandle;

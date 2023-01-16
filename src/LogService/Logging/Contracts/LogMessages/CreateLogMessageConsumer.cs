@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
+using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
-using CommonLibrary.Logging.Models;
 using CommonLibrary.Logging.Models.Dtos;
 using LogService.Logging.Models;
 using MassTransit;
 
-namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogMessages;
+namespace LogService.Logging.LogMessages;
 
 public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {

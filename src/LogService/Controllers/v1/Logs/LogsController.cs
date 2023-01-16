@@ -1,4 +1,4 @@
-﻿using CommonLibrary.AspNetCore.Logging.LoggingService;
+﻿using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
 using LogService.Logging.Models;

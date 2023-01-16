@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
-using CommonLibrary.AspNetCore.ServiceBus.Contracts.Logging;
+using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models.Dtos;
-using LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles.Utilities;
 using MassTransit;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
-namespace LogService.ServiceBus.Consumer_Contracts.Logging.LogHandles;
+namespace LogService.Logging.LogHandles;
 
 public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
 {

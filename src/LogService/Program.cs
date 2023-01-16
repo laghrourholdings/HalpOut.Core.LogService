@@ -1,8 +1,9 @@
 using CommonLibrary.AspNetCore;
-using CommonLibrary.AspNetCore.Logging.LoggingService;
+using CommonLibrary.AspNetCore.Core;
+using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
-using LogService.EFCore;
+using LogService.Core;
 using LogService.Logging;
 using Serilog;
 using LoggingService = LogService.Logging.LoggingService;

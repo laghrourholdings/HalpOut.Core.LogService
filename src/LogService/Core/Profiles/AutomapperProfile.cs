@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using CommonLibrary.AspNetCore.ServiceBus;
-using CommonLibrary.Logging.Models;
 using CommonLibrary.Logging.Models.Dtos;
 using LogService.Logging.Models;
 
-namespace LogService.Profiles;
+namespace LogService.Core;
 
 public class LogModelsProfile : Profile
 {
