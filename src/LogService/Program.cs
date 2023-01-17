@@ -5,6 +5,7 @@ using CommonLibrary.Core;
 using CommonLibrary.Logging.Models;
 using LogService.Core;
 using LogService.Logging;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using LoggingService = LogService.Logging.LoggingService;
 using LogHandle = LogService.Logging.Models.LogHandle;
@@ -14,7 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var logger = new LoggerConfiguration().WriteTo.Console();
-builder.Services.AddDbContext<ServiceDbContext>();
+builder.Services.AddDbContext<StoreDbContext>();
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));
+
 builder.Services.AddCommonLibrary(builder.Configuration, builder.Logging, logger , MyAllowSpecificOrigins);
 //builder.Services.AddScoped<IRepository<LogMessage>, LogMessageRepository>();
 builder.Services.AddScoped<ILoggingService, LoggingService>();
@@ -31,5 +34,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
 
+    var context = services.GetRequiredService<StoreDbContext>();
+    if (context.Database.GetPendingMigrations().Any())
+    {
+        context.Database.Migrate();
+    }
+}
 app.Run();

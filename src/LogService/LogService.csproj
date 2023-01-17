@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="LH.ForYou.CommonLibrary.AspNetCore" Version="1.0.4" />
+        <PackageReference Include="LaghrourHoldings.HalpOut.CommonLibrary.AspNetCore" Version="1.0.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.11" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
           <PrivateAssets>all</PrivateAssets>
@@ -19,13 +19,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\CommonLibrary\src\CommonLibrary.AspNetCore\CommonLibrary.AspNetCore.csproj" />
+        <ProjectReference Include="..\..\..\..\..\Libraries\CommonLibrary\src\CommonLibrary.AspNetCore\CommonLibrary.AspNetCore.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Core" />
       <Folder Include="Logging\Contracts" />
       <Folder Include="Logging\Interfaces" />
       <Folder Include="Migrations" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Update="Deployment\Local\docker-compose.yml">
+        <Link>Infrastructure (rabbitmq)\docker-compose.yml</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

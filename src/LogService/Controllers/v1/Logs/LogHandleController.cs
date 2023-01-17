@@ -30,8 +30,12 @@ public class LogHandlesController : ControllerBase
     public async Task<IActionResult> GetAllHandles()
     {
         var logHandles = await _handleRepository.GetAllAsync();
-        var logHandlesDto = logHandles.Select(x => _mapper.Map<LogHandle, LogHandleDto>(x));
-        return Ok(logHandlesDto);
+        if (logHandles is not null)
+        {
+            var logHandlesDto = logHandles.Select(x => _mapper.Map<LogHandle, LogHandleDto>(x));
+            return Ok(logHandlesDto);
+        }
+        return Ok();
     }
     
     [HttpGet("{id:guid}")]

@@ -12,9 +12,9 @@ namespace LogService.Logging;
 
 public class LogHandleRepository : IRepository<LogHandle>
 {
-    private readonly ServiceDbContext _context;
+    private readonly StoreDbContext _context;
     public LogHandleRepository(
-        ServiceDbContext context)
+        StoreDbContext context)
     {
         _context = context;
     }
