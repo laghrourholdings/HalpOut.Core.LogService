@@ -1,0 +1,43 @@
+# docker run -d --rm -name mongo -p 27017:27017 -v mongodbdata:/data/db mongo
+
+version: "3.6"
+
+services:
+  logservice_store_postgresdb:
+    image: 'postgres'
+    hostname: logservice_store_postgresdb
+    container_name: logservice_store_postgresdb
+    ports:
+      - "6011:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database 
+    volumes:
+      - ./db-data/logservice-store:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - internal
+  logservice:
+    container_name: logservice
+    build:
+      context:  ../../src/LogService/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+    - "4041:443"
+    - "5051:80"
+    networks:
+      - external
+      - internal
+    depends_on:
+      - logservice_store_postgresdb
+networks:
+  external:
+    external: true
+    name: external_network
+  internal:
+    external: true
+    name: internal_network
+
+
