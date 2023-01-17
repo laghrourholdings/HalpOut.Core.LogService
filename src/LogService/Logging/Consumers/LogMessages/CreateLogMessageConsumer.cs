@@ -5,7 +5,7 @@ using CommonLibrary.Logging.Models.Dtos;
 using LogService.Logging.Models;
 using MassTransit;
 
-namespace LogService.Logging.LogMessages;
+namespace LogService.Logging;
 
 public class CreateLogMessageConsumer : IConsumer<CreateLogMessage>
 {

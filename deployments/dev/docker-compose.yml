@@ -18,6 +18,23 @@ services:
     restart: unless-stopped
     networks:
       - internal
+  logservice_securoman_redis:
+    image: "redis:alpine"
+    
+    command: redis-server
+    
+    ports:
+      - "6021:6379"
+    
+    volumes:
+      - ./db-data/logservice_securoman/www:/home/distressedpro/public_html
+      - ./db-data/logservice_securoman/conf:/etc/apache2/sites-available
+      
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped
+    networks:
+      - internal
   
 networks:
   external:

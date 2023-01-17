@@ -1,4 +1,4 @@
-﻿namespace LogService.Logging.LogHandles.Utilities;
+﻿namespace LogService.Logging;
 
 public static class LogHandleSlotUtility
 {

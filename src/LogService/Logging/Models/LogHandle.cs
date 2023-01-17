@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using CommonLibrary.Logging.Models;
 using CommonLibrary.Logging.Models.Dtos;
 
 namespace LogService.Logging.Models;

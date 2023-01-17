@@ -5,7 +5,7 @@ using CommonLibrary.Logging.Models.Dtos;
 using MassTransit;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
-namespace LogService.Logging.LogHandles;
+namespace LogService.Logging;
 
 public class CreateLogHandleConsumer : IConsumer<CreateLogHandle>
 {
