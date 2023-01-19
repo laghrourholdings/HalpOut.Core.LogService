@@ -16,56 +16,25 @@ public class LogHandleRepository : IRepository<LogHandle>
         _context = context;
     }
 
-    public async Task<IEnumerable<LogHandle>?> GetAllAsync()
+    public async Task<List<LogHandle>?> GetAllAsync()
     {
-        var logHandles = _context.LogHandles.Include(x=>x.Messages).Select(x=>x);
-        if (!logHandles.Any())
-        {
-            return null;
-        }
-        // foreach (var logHandle in logHandles)
-        // {
-        //     var logMessages = _
-        //     if (logMessages != null)
-        //         logHandle.Messages = logMessages.ToHashSet();
-        //     else
-        //         logHandle.Messages = null;
-        // }
-        return logHandles;
+        var logHandles = await _context.LogHandles.Include(x=>x.Messages).ToListAsync();
+        return !logHandles.Any() ? null : logHandles;
     }
 
-    public async Task<IEnumerable<LogHandle>?> GetAllAsync(
+    public async Task<List<LogHandle>?> GetAllAsync(
         Expression<Func<LogHandle, bool>> filter)
     {
         var logHandles = await _context.LogHandles.Include(x=>x.Messages).Where(filter).ToListAsync();
-        if (!logHandles.Any())
-        {
-            return null;
-        }
-        /*
-        foreach (var logHandle in logHandles)
-        {
-            var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
-            if (logMessages != null)
-                logHandle.Messages = logMessages.ToList();
-            else
-                logHandle.Messages = null;
-        }*/
-        return logHandles;
+        return !logHandles.Any() ? null : logHandles;
+
     }
 
     public async Task<LogHandle?> GetAsync(
         Guid Id)
     {
         var logHandle = await _context.LogHandles.Include(x=>x.Messages).SingleOrDefaultAsync(x => x.LogHandleId == Id);
-        if (logHandle == null)
-            return null;
-        // var logMessages = await _messageRepository.GetAllAsync(x => x.LogHandleId == logHandle.Id);
-        // if (logMessages != null)
-        //     logHandle.Messages = logMessages.ToList();
-        // else
-        //     logHandle.Messages = null;
-        return logHandle;
+        return logHandle ?? null;
     }
 
     public async Task<LogHandle?> GetAsync(

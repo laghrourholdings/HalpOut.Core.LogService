@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models.Dtos;
@@ -27,6 +28,8 @@ public class LogHandlesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllHandles()
     {
+        if (HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) == null)
+            return BadRequest("Not authorized");
         var logHandles = await _handleRepository.GetAllAsync();
         if (logHandles is not null)
         {
