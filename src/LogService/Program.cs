@@ -8,10 +8,10 @@ using Serilog;
 using LoggingService = LogService.Logging.LoggingService;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var logger = new LoggerConfiguration().WriteTo.Console();
 builder.Services.AddDbContext<StoreDbContext>();
 builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection(nameof(DatabaseSettings)));

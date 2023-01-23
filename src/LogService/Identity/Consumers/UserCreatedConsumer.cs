@@ -1,7 +1,5 @@
 ﻿using CommonLibrary.AspNetCore.Identity;
 using CommonLibrary.AspNetCore.Logging;
-using CommonLibrary.Core;
-using LogService.Logging.Models;
 using MassTransit;
 using Microsoft.Extensions.Caching.Distributed;
 
