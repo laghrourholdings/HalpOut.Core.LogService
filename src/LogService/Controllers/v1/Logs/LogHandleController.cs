@@ -1,6 +1,5 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
-using CommonLibrary.AspNetCore.Identity;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
 using CommonLibrary.Logging.Models.Dtos;
@@ -28,7 +27,7 @@ public class LogHandlesController : ControllerBase
         _loggingService = loggingService;
     }
     [HttpGet]
-    [Authorize(AuthenticationSchemes = SecuromanAuthenticationHandler.SchemaName)]
+    [Authorize]
     public async Task<IActionResult> GetAllHandles()
     {
         if (HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) == null)
