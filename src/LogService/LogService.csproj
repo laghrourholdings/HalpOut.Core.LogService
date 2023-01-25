@@ -22,6 +22,7 @@
         <ProjectReference Include="..\..\..\..\..\Libraries\CommonLibrary\src\CommonLibrary.AspNetCore\CommonLibrary.AspNetCore.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Identity" />
       <Folder Include="Logging\Consumers" />
       <Folder Include="Logging\Interfaces" />
       <Folder Include="Migrations" />
