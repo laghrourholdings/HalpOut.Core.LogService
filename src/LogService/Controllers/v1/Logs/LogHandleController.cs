@@ -1,7 +1,8 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
+using CommonLibrary.AspNetCore.Identity.Policies;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
+using CommonLibrary.Identity.Models;
 using CommonLibrary.Logging.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,10 +28,11 @@ public class LogHandlesController : ControllerBase
         _loggingService = loggingService;
     }
     [HttpGet]
-    [Authorize]
+    [Authorize(Policy = UserPolicy.ELEVATED_RIGHTS)]
     public async Task<IActionResult> GetAllHandles()
     {
-        if (HttpContext.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) == null)
+        
+        if (HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimTypes.Id) == null)
             return BadRequest("Not authorized");
         var logHandles = await _handleRepository.GetAllAsync();
         if (logHandles is not null)
@@ -42,6 +44,7 @@ public class LogHandlesController : ControllerBase
     }
     
     [HttpGet("{id:guid}")]
+    [Authorize]
     public async Task<IActionResult> GetHandle(Guid Id)
     {
         var logHandle = await _handleRepository.GetAsync(x=>x.LogHandleId == Id);
