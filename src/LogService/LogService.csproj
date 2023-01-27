@@ -22,7 +22,6 @@
         <ProjectReference Include="..\..\..\..\..\Libraries\CommonLibrary\src\CommonLibrary.AspNetCore\CommonLibrary.AspNetCore.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Identity" />
       <Folder Include="Logging\Consumers" />
       <Folder Include="Logging\Interfaces" />
       <Folder Include="Migrations" />
@@ -32,5 +31,7 @@
         <Link>Infrastructure (rabbitmq)\docker-compose.yml</Link>
       </Content>
     </ItemGroup>
-
+    <ItemGroup>
+        <Protobuf Include="Identity/Protos/securoman.proto" GrpcServices="Client" />
+    </ItemGroup>
 </Project>
