@@ -14,6 +14,6 @@ public class GrpcUserProfile : Profile
         //     .ForMember(dest=>  dest.SecretKey, opt=> opt.MapFrom(src=> src.SecretKey))
         //     .ForMember(dest=>  dest.RoleIdentity, opt=> opt.MapFrom(src=> src.RoleIdentity))
         //     .ForMember(dest=> dest.RoleIdentity.Roles, opt=> opt.MapFrom(src=> src.RoleIdentity.Roles))
-        //     .ForMember(dest=> dest.RoleIdentity.Permissions, opt=> opt.MapFrom(src=> src.RoleIdentity.Permissions));
+        //     .ForMember(dest=> dest.RoleIdentity.Properties, opt=> opt.MapFrom(src=> src.RoleIdentity.Properties));
     }
 }*/

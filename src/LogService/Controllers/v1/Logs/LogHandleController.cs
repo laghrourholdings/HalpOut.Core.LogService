@@ -5,6 +5,7 @@ using CommonLibrary.Core;
 using CommonLibrary.Identity.Models;
 using CommonLibrary.Logging.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
