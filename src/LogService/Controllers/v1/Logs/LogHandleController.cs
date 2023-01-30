@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
+using CommonLibrary.AspNetCore.Identity;
 using CommonLibrary.AspNetCore.Identity.Policies;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.Core;
-using CommonLibrary.Identity.Models;
 using CommonLibrary.Logging.Models.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using LogHandle = LogService.Logging.Models.LogHandle;
 
@@ -18,23 +17,24 @@ public class LogHandlesController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IRepository<LogHandle> _handleRepository;
     private readonly ILoggingService _loggingService;
+    private readonly ISecuromanService _securoman;
 
     public LogHandlesController(
         IMapper mapper,
         IRepository<LogHandle> handleRepository,
-        ILoggingService loggingService)
+        ILoggingService loggingService,
+        ISecuromanService securoman)
     {
         _mapper = mapper;
         _handleRepository = handleRepository;
         _loggingService = loggingService;
+        _securoman = securoman;
     }
     [HttpGet]
     [Authorize(Policy = UserPolicy.ELEVATED_RIGHTS)]
     public async Task<IActionResult> GetAllHandles()
     {
-        
-        if (HttpContext.User.Claims.FirstOrDefault(x => x.Type == UserClaimTypes.Id) == null)
-            return BadRequest("Not authorized");
+
         var logHandles = await _handleRepository.GetAllAsync();
         if (logHandles is not null)
         {
