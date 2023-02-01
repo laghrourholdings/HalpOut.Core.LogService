@@ -17,13 +17,13 @@ public class LogHandlesController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IRepository<LogHandle> _handleRepository;
     private readonly ILoggingService _loggingService;
-    private readonly ISecuromanService _securoman;
+    private readonly ISecuroman _securoman;
 
     public LogHandlesController(
         IMapper mapper,
         IRepository<LogHandle> handleRepository,
         ILoggingService loggingService,
-        ISecuromanService securoman)
+        ISecuroman securoman)
     {
         _mapper = mapper;
         _handleRepository = handleRepository;
@@ -34,7 +34,6 @@ public class LogHandlesController : ControllerBase
     [Authorize(Policy = UserPolicy.ELEVATED_RIGHTS)]
     public async Task<IActionResult> GetAllHandles()
     {
-
         var logHandles = await _handleRepository.GetAllAsync();
         if (logHandles is not null)
         {
